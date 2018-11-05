@@ -1,0 +1,9 @@
+.Rproj.user
+*.Rproj
+*swp
+*~
+.Rhistory
+.DS_Store
+working
+*.html
+
