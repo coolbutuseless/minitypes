@@ -7,7 +7,16 @@ uint24_to_raw <- function(uint24_vec, endian = c('little', 'big'), ...) {
   stopifnot(is_uint24_vec(uint24_vec))
   endian <- match.arg(endian)
 
-  writeBin(uint24_vec, raw(), size = 3L, useBytes = TRUE, endian = endian)
+  # Can't do 'size = 3'
+  # writeBin(uint24_vec, raw(), size = 3L, useBytes = TRUE, endian = endian)
+
+  # so instead, treat as 32 bit, and drop every 4th byte from the raw vec
+  raw_vec <- int32_to_raw(uint24_vec, endian = endian)
+  if (length(raw_vec) > 0) {
+    raw_vec <- raw_vec[-seq(1L, length(raw_vec), 4L)]
+  }
+
+  raw_vec
 }
 
 

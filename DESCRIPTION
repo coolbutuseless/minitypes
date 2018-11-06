@@ -1,10 +1,10 @@
 Package: minitypes
 Type: Package
-Title: Handle Types
-Version: 0.1.0
+Title: Vector Type Conversions
+Version: 0.1.1
 Author: mikefc@coolubutuseless.com
 Maintainer: mikefc <mikefc@coolubutuseless.com>
-Description: Handle type conversions.
+Description: Type conversions for vectors.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
