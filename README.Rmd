@@ -153,38 +153,6 @@ convert_type(NA_character_, 'chr', 'bitstring', endian = 'big', first_bit = 'msb
 
 
 
-## Worked Example - Parsing a 'jpeg' header
-
-* Read in a JPEG file as raw bytes
-* Manually parse the JFIF header (see [JFIF wikipedia page](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format))
-* JPG data is stored big endian
-
-```{r}
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Everyone with R has this jpeg. Read it in as 'raw' bytes
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-rjpeg_filename <- system.file('img/Rlogo.jpg', package='jpeg')
-rjpeg          <- readBin(rjpeg_filename, 'raw', n = file.size(rjpeg_filename))
-
-head(rjpeg, 50)
-```
-
-```{r}
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Subset out the header components and convert to the correct type
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-raw_to_hex16 (rjpeg[ 1: 2], endian = 'big')  # JPEG SOI Marker $FFD8 (hexadecimal)
-
-raw_to_hex16 (rjpeg[ 3: 4], endian = 'big')  # JFIF-APP0 Marker $FFE0 (hexadecimal)
-
-raw_to_uint16(rjpeg[ 5: 6], endian = 'big')  # Length of APP0 Segment (integer)
-
-raw_to_chr   (rjpeg[ 7:11], endian = 'big')  # 'JFIF' (text)
-```
-
-
-
-
 
 ## Worked Example - Parsing a colour table from a 'gif'
 
@@ -210,14 +178,14 @@ head(gif, 50)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Subset out the header components and convert to the correct type
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-raw_to_chr(gif[ 1: 6], endian = 'big')  # "GIF89a" (text)
+raw_to_chr(gif[1:6])  # "GIF89a" (text)
 
-raw_to_uint16(gif[ 7: 8], endian = 'little')  # width (integer)
+raw_to_uint16(gif[7:8], endian = 'little')  # width (integer)
 
-raw_to_uint16(gif[ 9:10], endian = 'little')  # height (integer)
+raw_to_uint16(gif[9:10], endian = 'little')  # height (integer)
 
 # Is a global colour table present?
-colour_table_info <- raw_to_uint8(gif[11], endian = 'little')  
+colour_table_info <- raw_to_uint8(gif[11])  
 if (bitwAnd(colour_table_info, 128L)) { print("GCT present") }
 
 # read 255 RGB triplets has 6-char-hex (i.e. hex24) starting at position 14

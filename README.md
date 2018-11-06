@@ -153,44 +153,6 @@ convert_type(NA_character_, 'chr', 'bitstring', endian = 'big', first_bit = 'msb
 #> [1] "0100111001000001"
 ```
 
-Worked Example - Parsing a ‘jpeg’ header
-----------------------------------------
-
--   Read in a JPEG file as raw bytes
--   Manually parse the JFIF header (see [JFIF wikipedia
-    page](https://en.wikipedia.org/wiki/JPEG_File_Interchange_Format))
--   JPG data is stored big endian
-
-``` r
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Everyone with R has this jpeg. Read it in as 'raw' bytes
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-rjpeg_filename <- system.file('img/Rlogo.jpg', package='jpeg')
-rjpeg          <- readBin(rjpeg_filename, 'raw', n = file.size(rjpeg_filename))
-
-head(rjpeg, 50)
-#>  [1] ff d8 ff e0 00 10 4a 46 49 46 00 01 01 01 01 2c 01 2c 00 00 ff e1 00
-#> [24] 80 45 78 69 66 00 00 4d 4d 00 2a 00 00 00 08 00 05 01 12 00 03 00 00
-#> [47] 00 01 00 01
-```
-
-``` r
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Subset out the header components and convert to the correct type
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-raw_to_hex16 (rjpeg[ 1: 2], endian = 'big')  # JPEG SOI Marker $FFD8 (hexadecimal)
-#> [1] "ffd8"
-
-raw_to_hex16 (rjpeg[ 3: 4], endian = 'big')  # JFIF-APP0 Marker $FFE0 (hexadecimal)
-#> [1] "ffe0"
-
-raw_to_uint16(rjpeg[ 5: 6], endian = 'big')  # Length of APP0 Segment (integer)
-#> [1] 16
-
-raw_to_chr   (rjpeg[ 7:11], endian = 'big')  # 'JFIF' (text)
-#> [1] "JFIF"
-```
-
 Worked Example - Parsing a colour table from a ‘gif’
 ----------------------------------------------------
 
@@ -220,17 +182,17 @@ head(gif, 50)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Subset out the header components and convert to the correct type
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-raw_to_chr(gif[ 1: 6], endian = 'big')  # "GIF89a" (text)
+raw_to_chr(gif[1:6])  # "GIF89a" (text)
 #> [1] "GIF89a"
 
-raw_to_uint16(gif[ 7: 8], endian = 'little')  # width (integer)
+raw_to_uint16(gif[7:8], endian = 'little')  # width (integer)
 #> [1] 480
 
-raw_to_uint16(gif[ 9:10], endian = 'little')  # height (integer)
+raw_to_uint16(gif[9:10], endian = 'little')  # height (integer)
 #> [1] 320
 
 # Is a global colour table present?
-colour_table_info <- raw_to_uint8(gif[11], endian = 'little')  
+colour_table_info <- raw_to_uint8(gif[11])  
 if (bitwAnd(colour_table_info, 128L)) { print("GCT present") }
 #> [1] "GCT present"
 
