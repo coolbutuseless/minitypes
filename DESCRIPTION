@@ -1,7 +1,7 @@
 Package: minitypes
 Type: Package
 Title: Vector Type Conversions
-Version: 0.1.1
+Version: 0.1.2
 Author: mikefc@coolubutuseless.com
 Maintainer: mikefc <mikefc@coolubutuseless.com>
 Description: Type conversions for vectors.

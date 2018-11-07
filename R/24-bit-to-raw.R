@@ -13,7 +13,11 @@ uint24_to_raw <- function(uint24_vec, endian = c('little', 'big'), ...) {
   # so instead, treat as 32 bit, and drop every 4th byte from the raw vec
   raw_vec <- int32_to_raw(uint24_vec, endian = endian)
   if (length(raw_vec) > 0) {
-    raw_vec <- raw_vec[-seq(1L, length(raw_vec), 4L)]
+    if (endian == 'big') {
+      raw_vec <- raw_vec[-seq(1L, length(raw_vec), 4L)]
+    } else {
+      raw_vec <- raw_vec[-seq(4L, length(raw_vec), 4L)]
+    }
   }
 
   raw_vec
