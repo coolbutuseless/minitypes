@@ -29,5 +29,9 @@ test_that("pad_bit_vec works", {
   expect_equal(as.logical(res[1:8]), as.logical(c(0, 1, 1, 1,  1, 1, 1, 1)))
 
 
+  # if 'multiple' size is same as actual size, then expect identical result
+  bit_vec <- bit::as.bit(c(0, 0, 0, 0, 0, 0, 0, 0))
+  res <- pad_bit_vec(bit_vec, multiple = 8)
+  expect_identical(bit_vec, res)
 
 })

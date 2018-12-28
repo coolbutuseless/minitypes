@@ -1,25 +1,6 @@
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#' Get the length of a vector of the given type
-#'
-#' @param vec vector of values
-#' @param type type of values
-#'
-#' @return Number of elements in the vector
-#' @export
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-vec_length <- function(vec, type) {
-  if (type %in% c('utf8', 'chr', 'bitstring')) {
-    nchar(vec)
-  } else {
-    length(vec)
-  }
-}
-
-
-
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Relative sizes of types compared to 'raw'
 #'
 #' @export
@@ -44,7 +25,6 @@ relative_size <- c(
 )
 
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #' Get the number of bytes in a vector of the given type
 #'
@@ -55,9 +35,8 @@ relative_size <- c(
 #' @export
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 nbytes <- function(vec, type) {
-  vec_length(vec, type) * relative_size[[type]]
+  nelems(vec, type) * relative_size[[type]]
 }
-
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -69,3 +48,25 @@ nbytes <- function(vec, type) {
 tidy_bitstring <- function(bitstring) {
   gsub("\\s", "", bitstring)
 }
+
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#' Return the number of elements in a vector of values of the given type
+#'
+#' @param values values
+#' @param type type
+#'
+#' @return length
+#'
+#' @export
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nelems <- function(values, type) {
+  if (type == 'bitstring') {
+    nchar(tidy_bitstring(values))
+  } else if (type %in% c('chr', 'utf8')) {
+    nchar(values)
+  } else {
+    length(values)
+  }
+}
+

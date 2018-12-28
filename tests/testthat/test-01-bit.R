@@ -38,3 +38,32 @@ test_that("bit types must contain at least 1 element", {
   expect_identical(logical_to_bitstring(logical_vec), bitstring)
 
 })
+
+
+
+
+test_that("logical-to-raw padding works", {
+
+  logical_vec <- TRUE
+  suppressMessages({
+    expect_equal(logical_to_raw(logical_vec), as.raw(128))
+  })
+
+  logical_vec <- TRUE
+  suppressMessages({
+    expect_equal(logical_to_raw(logical_vec, pad = 'left'), as.raw(1))
+  })
+
+})
+
+
+
+test_that("identidy type conversion returns same object", {
+
+  uint8_vec <- 1:4
+  raw_vec   <- convert_type(uint8_vec, 'uint8', 'raw')
+  expect_identical(uint8_vec, convert_type(uint8_vec, 'uint8' , 'uint8' ))
+  expect_identical(uint8_vec, convert_type(uint8_vec, 'uint32', 'uint32'))
+  expect_identical(raw_vec  , convert_type(raw_vec, 'raw'   , 'raw'))
+
+})

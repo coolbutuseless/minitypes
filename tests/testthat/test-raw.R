@@ -133,3 +133,32 @@ test_that("raw-to-x x-to-raw works", {
   expect_identical(raw_vec, transfer)
 
 })
+
+
+
+
+
+
+
+test_that("raw_to_int32 demands multiples of 4 bytes", {
+  raw_vec <- as.raw(1:3)
+  expect_error(raw_to_int32(raw_vec), "multiple of 4")
+})
+
+
+test_that("raw_to_X16 demands multiples of 4 bytes", {
+  raw_vec <- as.raw(1:3)
+  expect_error(raw_to_uint16(raw_vec), "multiple of 2")
+  expect_error(raw_to_int16 (raw_vec), "multiple of 2")
+  expect_error(raw_to_hex16 (raw_vec), "multiple of 2")
+})
+
+
+test_that("convert_type verbose flag", {
+  raw_vec <- as.raw(1:4)
+  expect_message(convert_type(raw_vec, 'raw', 'int32', verbose = TRUE), "Direct conversion")
+})
+
+
+
+

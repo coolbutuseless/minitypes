@@ -26,4 +26,12 @@ test_that("uint24 to raw and back works", {
 
   expect_identical(convert_type(uint24_vec, 'uint24', 'hex24'), '010203')
 
+
+
+  raw_vec <- as.raw(1:4)
+  expect_error(convert_type(raw_vec, 'raw', 'uint24'), "multiple of 3")
+
 })
+
+
+

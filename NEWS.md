@@ -1,4 +1,9 @@
 
+
+# minitypes 0.1.3
+
+* Added `nelems()` to count elements of a given type
+
 # minitypes 0.1.2
 
 * Tests and another fix for `uint24_to_raw()`

@@ -19,6 +19,14 @@ test_that("int32_to_bit works", {
 
 
 
+test_that("int32_to_bit works", {
+  one <- 1L  # 00000000 00000000 00000000 00000001
+
+  expect_identical(bit_to_bitstring(int32_to_bit(one, endian = 'little', first_bit = 'lsb')), minitypes:::tidy_bitstring("10000000 00000000 00000000 00000000"))
+})
+
+
+
 test_that("logical_to_int32 works", {
   little_1 <- 1L
   big_1    <- raw_to_int32(as.raw(c(1, 0, 0, 0)), endian = 'big')
