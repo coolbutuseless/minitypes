@@ -1,7 +1,14 @@
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-minitypes
-=========
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+# minitypes
+
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/coolbutuseless/minitypes?branch=master&svg=true)](https://ci.appveyor.com/project/coolbutuseless/minitypes)
+[![Travis build
+status](https://travis-ci.org/coolbutuseless/minitypes.svg?branch=master)](https://travis-ci.org/coolbutuseless/minitypes)
+[![Coverage
+status](https://codecov.io/gh/coolbutuseless/minitypes/branch/master/graph/badge.svg)](https://codecov.io/github/coolbutuseless/minitypes?branch=master)
 ![](https://img.shields.io/badge/lifecycle-alpha-orange.svg)
 
 `minitypes` is a collection of type conversion tools for R atomic
@@ -9,42 +16,40 @@ vectors.
 
 This package is built upon R’s type conversion tools and aims to:
 
--   have a consistent interface for converting between types
--   add handling for types not handled by R explicitly e.g. `uint8`
+  - have a consistent interface for converting between types
+  - add handling for types not handled by R explicitly e.g. `uint8`
 
-Supported Types:
-----------------
+## Supported Types:
 
--   raw byte
-    -   This is R’s builtin `raw` byte format.
--   `chr`
-    -   Ascii/utf8 representation.
--   1 bit:
-    -   `logical` - R’s built-in logical type e.g. `c(T, T, F)`
-    -   `bit` - compact bit representation (from the [bit
+  - raw byte
+      - This is R’s builtin `raw` byte format.
+  - `chr`
+      - Ascii/utf8 representation.
+  - 1 bit:
+      - `logical` - R’s built-in logical type e.g. `c(T, T, F)`
+      - `bit` - compact bit representation (from the [bit
         package](https://cran.r-project.org/package=bit))
-    -   `bitstring` - character representaction of bits e.g. `110`
--   8 bit
-    -   `uint8` - R’s built-in integer type. Checked to be within range
+      - `bitstring` - character representaction of bits e.g. `110`
+  - 8 bit
+      - `uint8` - R’s built-in integer type. Checked to be within range
         \[0 - 255\]
-    -   `int8` - R’s built-in integer type. Checked to be within range
+      - `int8` - R’s built-in integer type. Checked to be within range
         \[-128, 127\]
-    -   `hex8` - 2 character hexadecimal representation of a `uint8`
--   16 bit
-    -   `uint16` - R’s built-in integer type. Checked to be within range
+      - `hex8` - 2 character hexadecimal representation of a `uint8`
+  - 16 bit
+      - `uint16` - R’s built-in integer type. Checked to be within range
         \[0 - 2^16-1\]
-    -   `int16` - R’s built-in integer type. Checked to be within range
+      - `int16` - R’s built-in integer type. Checked to be within range
         \[-2^15, 2^15-1\]
-    -   `hex16` - 4 character hexadecimal representation of a `uint16`
--   24 bit
-    -   `uint24` - R’s built-in integer type. Checked to be within range
+      - `hex16` - 4 character hexadecimal representation of a `uint16`
+  - 24 bit
+      - `uint24` - R’s built-in integer type. Checked to be within range
         \[0 - 2^24-1\]
-    -   `hex24` - 6 character hexadecimal representation of a `uint24`
--   32 bit
-    -   `int32` - R’s built-in integer type
+      - `hex24` - 6 character hexadecimal representation of a `uint24`
+  - 32 bit
+      - `int32` - R’s built-in integer type
 
-Installation
-------------
+## Installation
 
 You can install minitypes from github with:
 
@@ -53,21 +58,19 @@ You can install minitypes from github with:
 devtools::install_github("coolbutuseless/minitypes")
 ```
 
-Promotion Rules
----------------
+## Promotion Rules
 
--   types representing single bits will be padded out to be
-    -   a multiple of 8 bits when converting to `raw`
-    -   a multiple of 32 bits when converting to `int32`
-    -   the side to `pad` and the `value` (T/F) to pad with can be
+  - types representing single bits will be padded out to be
+      - a multiple of 8 bits when converting to `raw`
+      - a multiple of 32 bits when converting to `int32`
+      - the side to `pad` and the `value` (T/F) to pad with can be
         specified
--   types representing 8-bits can be promoted to 16-bit and 32-bit types
+  - types representing 8-bits can be promoted to 16-bit and 32-bit types
     as long as the correct number of bytes exist e.g.
-    -   can convert 4 `uint8` values to `int32`
-    -   can NOT convert 3 `raw` values to `uint16`
+      - can convert 4 `uint8` values to `int32`
+      - can NOT convert 3 `raw` values to `uint16`
 
-Examples - Functions to convert supported types to/from `raw`
--------------------------------------------------------------
+## Examples - Functions to convert supported types to/from `raw`
 
 ``` r
 r <- as.raw(c(1, 2, 0, 255))
@@ -89,8 +92,7 @@ logical_to_raw(c(T, F, F), pad = 'left')
 #> [1] 04
 ```
 
-`convert_type()` - conversion between any two supported types
--------------------------------------------------------------
+## `convert_type()` - conversion between any two supported types
 
 All supported types can be converted to/from the `raw` type. Thus any
 two supported types can be converted between each other by using `raw`
@@ -108,8 +110,7 @@ convert_type(c(1L, 2L, 3L), src_type = 'int32', dst_type = 'uint8', endian = 'bi
 #>  [1] 0 0 0 1 0 0 0 2 0 0 0 3
 ```
 
-Examples - Specialised conversion functions
--------------------------------------------
+## Examples - Specialised conversion functions
 
 `minitypes` includes some functions for direct conversion between two
 supported types.
@@ -132,18 +133,17 @@ int32_to_bitstring(1L, endian = 'little', first_bit = 'lsb')
 #> [1] "10000000000000000000000000000000"
 ```
 
-Helper functions
-----------------
+## Helper functions
 
--   `raw_reverse_bits()` - reverse the bits in a raw byte
--   `raw_swap_endian()` - swap the order of a group of bytes (`nbytes`
+  - `raw_reverse_bits()` - reverse the bits in a raw byte
+  - `raw_swap_endian()` - swap the order of a group of bytes (`nbytes`
     at a time) within a raw vector
 
-Useless tricks - `NA_integer_` & `NA_character_` bit representation
-===================================================================
+# Useless tricks - `NA_integer_` & `NA_character_` bit representation
 
 `NA_integer_` and `NA_character_` are just specific bit patterns within
-each of those types.
+each of those
+types.
 
 ``` r
 convert_type(NA_integer_, 'int32', 'bitstring', endian = 'big', first_bit = 'msb')
@@ -153,15 +153,17 @@ convert_type(NA_character_, 'chr', 'bitstring', endian = 'big', first_bit = 'msb
 #> [1] "0100111001000001"
 ```
 
-Worked Example - Parsing a colour table from a ‘gif’
-----------------------------------------------------
+## Worked Example - Parsing a colour table from a ‘gif’
 
--   Read in a GIF file as raw bytes
--   Manually parse the GIF header (see e.g. [GIF
+  - Read in a GIF file as raw bytes
+  - Manually parse the GIF header (see e.g. [GIF
     format](http://www.onicos.com/staff/iz/formats/gif.html))
--   GIF data is stored little endian
--   In most GIFs there’s a global colour table with 255 colours (defined
-    as a block of 255 RGB triplets)
+  - GIF data is stored little endian
+  - In most GIFs there’s a global colour table with 255 colours (defined
+    as a block of 255 RGB
+triplets)
+
+<!-- end list -->
 
 ``` r
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -206,4 +208,4 @@ head(colour_table)
 image(x = 1, y = 1:255, z = matrix(1:255, nrow = 1), col = colour_table, axes = FALSE, ann = FALSE)
 ```
 
-![](figures/README-gif-colour-table-1.png)
+![](figures/README-gif-colour-table-1.png)<!-- -->
